@@ -1,0 +1,8 @@
+/*
+解析 https://nifannn.github.io/2018/05/31/SQL-%E7%AC%94%E8%AE%B0-Hackerrank-Binary-Tree-Nodes/
+主要用的是 if 函数 来判断root, leaf这两个好区别
+medium
+*/
+SELECT N, IF(P IS NULL, 'Root', IF((SELECT COUNT(*) FROM BST WHERE P=B.N)>0, 'Inner', 'Leaf')) FROM BST AS B ORDER BY N;
+
+                                                                 /*这里的B.N是第一个我们设定比较的原始表格，注意区分！*/
