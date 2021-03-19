@@ -1,0 +1,42 @@
+/*medium*/
+
+/*
+1. 题目解析： https://nifannn.github.io/2018/06/01/SQL-%E7%AC%94%E8%AE%B0-Hackerrank-Occupations/
+Using either max()/min() can get first non-null value after group by.
+*/
+
+SET @r1=0, @r2=0, @r3 =0, @r4=0;
+SELECT MIN(Doctor), MIN(Professor), MIN(Singer), MIN(Actor) FROM
+(SELECT CASE Occupation WHEN 'Doctor' THEN @r1:=@r1+1
+                       WHEN 'Professor' THEN @r2:=@r2+1
+                       WHEN 'Singer' THEN @r3:=@r3+1
+                       WHEN 'Actor' THEN @r4:=@r4+1 END
+       AS RowLine,
+       CASE WHEN Occupation = 'Doctor' THEN Name END AS Doctor,
+       CASE WHEN Occupation = 'Professor' THEN Name END AS Professor,
+       CASE WHEN Occupation = 'Singer' THEN Name END AS Singer,
+       CASE WHEN Occupation = 'Actor' THEN Name END AS Actor   /*这是在给每一列起名字*/
+       FROM OCCUPATIONS ORDER BY Name) AS t
+GROUP BY RowLine;  /*order by这里很重要*/
+
+
+
+
+##### 这里case 列名
+                when 值 then ...
+      是case when... then... 的简单写法
+
+prac:
+set @r1=0, @r2=0,..;  分号记得！
+select min(doc),min(act),.. from
+(select case occupation when 'Doctor' then @r1:=@r1+1
+                        when 'Prof' then @r2:=@r2+1
+                        ......
+ as rowline,
+ case when Occupation = 'Doctor' then name end as Doctor,
+ case when ...
+ from occupations
+ order by names ) as t
+ group by rowline ;
+                        
+                      
