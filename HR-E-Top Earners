@@ -1,0 +1,6 @@
+/*求最大值的个数，可以用 ORDER BY earnings DESC LIMIT 1 
+这里，虽然有limit 1 但是只是限制了“一组”，count（*）依然不局限于1 */
+
+SELECT (months*salary) as earnings, COUNT(*) FROM Employee 
+GROUP BY earnings 
+ORDER BY earnings DESC LIMIT 1;
