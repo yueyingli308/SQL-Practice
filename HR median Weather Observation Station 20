@@ -1,0 +1,27 @@
+/*A median is defined as a number separating the higher half of a data set from the lower half. 
+Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to  decimal places.
+https://nifannn.github.io/2017/10/23/SQL-Notes-Hackerrank-Weather-Observation-Station-20/
+*/
+
+SET @rowIndex := -1;
+SELECT ROUND(AVG(t.LAT_N), 4) FROM
+(
+SELECT @rowIndex := @rowIndex+1 AS rowIndex, s.LAT_N FROM STATION AS s ORDER BY s.LAT_N
+) AS t
+WHERE t.rowIndex IN (FLOOR(@rowIndex / 2), CEIL(@rowIndex / 2));    
+
+
+
+
+/*
+思路：从0开始计数呢？一个11个数的数组，索引变为0，1，2，…, 10，同时中位数的索引为5，正好是10的一半。另外，对于一个12个数的数组，索引为0，1，2，…，11，中位数是索引为5和6的数的平均数，5和6分别是floor(11／2),ceil(11／2)。
+所以，可以先将数组排序，然后用一个变量记录索引（从0开始），然后找出索引为ceil(i/2)和floor(i/2)的数（i为最后一个数的索引大小），再计算平均值作为中位数。
+practice
+set @row: =-1;
+
+select round(avg(t.LAT_N),4) from
+
+(select @row := @row+1 as row, s.LAT_N from station as s order by s.LAT_N)
+as t
+where t.row in (floor(@(row /2), ceil(@row/2));
+*/
