@@ -1,0 +1,24 @@
+SELECT c.hacker_id, h.name, COUNT(c.challenge_id) AS cnt 
+FROM Hackers AS h JOIN Challenges AS c ON h.hacker_id = c.hacker_id
+GROUP BY c.hacker_id, h.name HAVING
+cnt = (SELECT COUNT(c1.challenge_id) FROM Challenges AS c1 GROUP BY c1.hacker_id ORDER BY COUNT(*) DESC LIMIT 1) OR
+cnt NOT IN (SELECT COUNT(c2.challenge_id) FROM Challenges AS c2 GROUP BY c2.hacker_id HAVING c2.hacker_id <> c.hacker_id)
+ORDER BY cnt DESC, c.hacker_id;
+
+
+
+
+##Comments:
+https://nifannn.github.io/2018/06/08/SQL-%E7%AC%94%E8%AE%B0-Hackerrank-Challenges/
+可以先连接（join）两张表，再按hacker_id和名字分组，求出每个学生创建题目数：
+
+
+SELECT c.hacker_id, h.name, COUNT(c.challenge_id) 
+FROM Hackers AS h JOIN Challenges AS c ON h.hacker_id = c.hacker_id
+GROUP BY c.hacker_id, h.name;      --------注意这里的group by是两个hacker_id和name！！！！
+
+然后，排除出题数与他人相同且不是最大值的学生。可以使用’GROUP BY … HAVING …'进行筛选。结果中的学生应满足两个条件之一：出题数最大或出题数唯一。
+
+HAVING
+cnt = (SELECT COUNT(c1.challenge_id) FROM Challenges AS c1 GROUP BY c1.hacker_id ORDER BY COUNT(*) DESC LIMIT 1) OR       --------求max的方法！！！！
+cnt NOT IN (SELECT COUNT(c2.challenge_id) FROM Challenges AS c2 GROUP BY c2.hacker_id HAVING c2.hacker_id <> c.hacker_id) --------求“出题数唯一，即与其他人的出题数都不一样”
